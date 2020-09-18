@@ -1,0 +1,74 @@
+#Rebecca Baione
+#Lab 1 (Part2)
+
+#call the data
+rm(list=ls())
+setwd("C:/Users/baionr/Downloads")
+EPI_data<-read.csv("EPI_data.csv") #renamed data
+View("EPI_data")
+attach(EPI_data)
+head(EPI_data)
+
+#test and fix the data
+fix(EPI_data)
+EPI #will return EPI_data$EPI
+tf<-is.na(EPI)
+E <- EPI[!tf] #will filter out NA values, creating a new array
+
+#Understand the data
+summary(EPI) #returns statistics of the data
+fivenum(EPI,na.rm=TRUE) #returns the first five numbers of the data
+stem(EPI) #stem and leaf plot
+
+#fitting distribution with histogram 
+hist(EPI) 
+hist(EPI,seq(30.,95.,1.0),prob=TRUE) 
+lines(density(EPI,na.rm=TRUE,bw=1.))
+lines(density(EPI,na.rm=TRUE,bw="SJ"))
+rug(EPI)
+
+#more ways to fit distribution
+plot(ecdf(EPI),do.points=FALSE, verticals=TRUE) #cumulative density function 
+#for quantile-quantile
+par(pty="s")
+qqnorm(EPI) #normal q-q plot
+qqplot(qt(ppoints(250),df=5),EPI,xlab="Q-Q plot")
+qqline(EPI)
+
+help(distributions) #different distributions
+#Normal Distribution
+dnorm(EPI,58.37,sd=1,log=FALSE)
+
+#Fitting a distribution for DALY
+summary(DALY)
+hist(DALY)
+hist(DALY,seq(0,95,1),prob=TRUE) #histogram of DALY, seq(MIN,MAX,INT)
+lines(density(DALY,na.rm=TRUE,bw="SJ"))
+rug(DALY)
+
+plot(ecdf(DALY),do.points=FALSE, verticals=TRUE)
+qqnorm(DALY)
+qqplot(qt(ppoints(250),df=5),DALY,xlab="Q-Q plot for Daly")
+qqline(DALY)
+
+#Fitting a distribution for WATER_H
+summary(WATER_H)
+hist(WATER_H)
+hist(WATER_H,seq(0,100,1),prob=TRUE)
+lines(density(WATER_H,na.rm=TRUE,bw="SJ"))
+rug(WATER_H)
+
+plot(ecdf(WATER_H),do.points=FALSE,verticals=TRUE)
+qqnorm(WATER_H)
+qqplot(qt(ppoints(250),df=5),WATER_H,xlab="Q-Q plot for WATER_H")
+
+#Comparing Distributions
+boxplot(EPI,DALY)
+qqplot(EPI,DALY)
+
+#Filtering
+  #CONDitional:
+EPILand<-EPI[!Landlock]
+Eland <- EPILand[!is.na(EPILand)]
+hist(Eland)
+hist(Eland,seq(30.,95.,1.0),prob=TRUE)
